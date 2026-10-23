@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f4f1e9">
+    <title>Stillroom - a little space to colour</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Stillroom home">
+          <span class="brand-mark" aria-hidden="true">s</span>
+          <span>stillroom</span>
+        </a>
+        <p class="top-note">a little space to colour</p>
+        <nav class="main-nav" aria-label="Main navigation">
+          <button class="nav-button active" data-view="studio" type="button">Studio</button>
+          <button class="nav-button" data-view="create" type="button">Create</button>
+          <button class="nav-button" data-view="settings" type="button">Settings</button>
+        </nav>
+        <div class="save-indicator"><span></span> Saved on this device</div>
+      </header>
+
+      <main id="studioView" class="studio-view">
+        <aside class="page-sidebar" aria-label="Colouring pages">
+          <div class="sidebar-heading">
+            <div>
+              <span class="eyebrow">YOUR LITTLE LIBRARY</span>
+              <h1>Colouring pages</h1>
+            </div>
+            <button class="icon-button add-page" id="newPageButton" type="button" aria-label="Create a page" title="Create a page">+</button>
+          </div>
+          <div class="difficulty-filter" role="group" aria-label="Filter by difficulty">
+            <button class="filter-chip active" data-difficulty="all" type="button">All</button>
+            <button class="filter-chip" data-difficulty="Gentle" type="button">Gentle</button>
+            <button class="filter-chip" data-difficulty="Winding" type="button">Winding</button>
+            <button class="filter-chip" data-difficulty="Detailed" type="button">Detailed</button>
+          </div>
+          <div id="pageList" class="page-list"></div>
+          <div class="sidebar-bottom">
+            <span class="tiny-sun" aria-hidden="true">✳</span>
+            <span>Your pages stay yours.</span>
+          </div>
+        </aside>
+
+        <section class="work-area" aria-label="Colouring studio">
+          <div class="work-heading">
+            <div>
+              <div class="breadcrumb"><span>LIBRARY</span><span>/</span><strong id="currentCategory">GENTLE</strong></div>
+              <h2 id="pageTitle">The slow garden</h2>
+              <p id="pageSubtitle">A few leaves, a little room to breathe.</p>
+            </div>
+            <div class="work-actions">
+              <button class="soft-button" id="undoButton" type="button" title="Undo last mark">↶ <span>Undo</span></button>
+              <button class="soft-button" id="clearButton" type="button" title="Clear this page">⌫ <span>Clear</span></button>
+              <button class="round-button" id="downloadButton" type="button" title="Download finished page" aria-label="Download finished page">↓</button>
+            </div>
+          </div>
+
+          <div class="artboard-wrap">
+            <div class="paper-meta"><span id="pageCount">01 / 06</span><span>TAKE YOUR TIME</span></div>
+            <div class="artboard" id="artboard">
+              <svg id="fillsSvg" class="page-svg fills-svg" viewBox="0 0 600 500" aria-label="Colouring page regions"></svg>
+              <canvas id="paintCanvas" width="1200" height="1000" aria-label="Draw inside the page outlines"></canvas>
+              <svg id="linesSvg" class="page-svg lines-svg" viewBox="0 0 600 500" aria-hidden="true"></svg>
+              <div class="page-empty" id="pageEmpty" hidden>Your page is ready for its first colour.</div>
+            </div>
+            <div class="artboard-caption"><span>✳</span> Little by little is still progress.</div>
+          </div>
+
+          <div class="tool-dock">
+            <div class="tool-group tool-select" role="group" aria-label="Drawing tool">
+              <button class="tool-button active" data-tool="fill" type="button" title="Fill a closed area" aria-label="Fill tool"><span>◒</span><small>Fill</small></button>
+              <button class="tool-button" data-tool="pen" type="button" title="Draw inside the lines" aria-label="Pen tool"><span>✎</span><small>Pen</small></button>
+              <button class="tool-button" data-tool="marker" type="button" title="Soft marker, clipped to each area" aria-label="Marker tool"><span>▰</span><small>Marker</small></button>
+              <button class="tool-button" data-tool="crayon" type="button" title="Textured crayon, clipped to each area" aria-label="Crayon tool"><span>✳</span><small>Crayon</small></button>
+              <button class="tool-button" data-tool="free" type="button" title="Free draw on the page" aria-label="Free draw tool"><span>✏</span><small>Free</small></button>
+              <button class="tool-button" data-tool="eraser" type="button" title="Erase your brush marks" aria-label="Eraser tool"><span>▱</span><small>Eraser</small></button>
+            </div>
+            <div class="dock-divider"></div>
+            <div class="colour-section">
+              <div class="colour-heading"><span>COLOUR</span><span id="colourName">Fern</span></div>
+              <div id="swatches" class="swatches" role="group" aria-label="Choose a colour"></div>
+            </div>
+            <div class="dock-divider size-divider"></div>
+            <label class="brush-size">
+              <span class="size-label">BRUSH</span>
+              <input id="brushSize" type="range" min="3" max="54" value="16" aria-label="Brush size">
+              <span id="brushSizeValue">16</span>
+            </label>
+          </div>
+        </section>
+      </main>
+
+      <main id="createView" class="create-view" hidden>
+        <section class="create-intro">
+          <span class="eyebrow">A BLANK LITTLE CORNER</span>
+          <h1>Make a page of your own.</h1>
+          <p>Draw closed shapes to make your own colouring page. Each shape becomes a separate area you can fill later.</p>
+          <div class="create-controls">
+            <label>Page name<input id="newPageName" maxlength="40" value="My little page"></label>
+            <label>Difficulty<select id="newPageDifficulty"><option>Gentle</option><option>Winding</option><option>Detailed</option></select></label>
+            <div class="create-mode-toggle" role="group" aria-label="Create mode">
+              <button class="create-mode-button active" data-mode="shape" type="button">Shapes</button>
+              <button class="create-mode-button" data-mode="free" type="button">Free draw</button>
+            </div>
+            <button class="primary-button" id="saveCustomPage" type="button">Save page <span>↗</span></button>
+            <button class="text-button" id="clearCustomPage" type="button">Clear drawing</button>
+          </div>
+          <p class="create-tip"><span>✳</span> Close your shape by lifting your finger or mouse. You can draw as many areas as you like.</p>
+        </section>
+        <section class="create-board-section" aria-label="Draw a colouring page">
+          <div class="create-board-heading"><span>YOUR CANVAS</span><span id="shapeCount">0 shapes</span></div>
+          <div class="create-board artboard" id="createBoard">
+            <svg id="createSvg" class="page-svg lines-svg" viewBox="0 0 600 500" aria-label="Your drawing"></svg>
+            <canvas id="createCanvas" width="1200" height="1000" aria-label="Draw closed shapes here"></canvas>
+          </div>
+          <div class="create-board-foot"><span>DRAW A LOOP TO MAKE A COLOURABLE AREA</span><span>600 × 500</span></div>
+        </section>
+      </main>
+
+      <main id="settingsView" class="settings-view" hidden>
+        <section class="settings-intro">
+          <span class="eyebrow">YOUR SPACE, YOUR PACE</span>
+          <h1>Settings &amp; saves</h1>
+          <p>Everything saves quietly on this device. Keep a backup or bring your pages to another screen.</p>
+        </section>
+        <section class="settings-layout">
+          <article class="settings-panel local-panel">
+            <div class="panel-icon">⌂</div>
+            <h2>On this device</h2>
+            <p>Your pages and colours are saved automatically in this browser.</p>
+            <div class="storage-row"><span>Saved pages</span><strong id="savedPageCount">0</strong></div>
+            <div class="panel-actions">
+              <button class="soft-button" id="exportSave" type="button">↓ Export backup</button>
+              <label class="soft-button import-label">↑ Import backup<input id="importSave" type="file" accept="application/json,.json"></label>
+            </div>
+          </article>
+          <article class="settings-panel cloud-panel">
+            <div class="panel-icon cloud-icon">↗</div>
+            <h2>Six-digit save codes</h2>
+            <p>Move a page between devices using a short code. Codes live in a public KVdb vault, so don’t include anything private.</p>
+            <div class="vault-status" id="vaultStatus"><span class="status-dot"></span><span>No shared vault yet</span></div>
+            <div class="panel-actions">
+              <button class="primary-button" id="createVault" type="button">Set up save codes <span>↗</span></button>
+              <button class="text-button" id="copyVaultLink" type="button" hidden>Make a save code <span>↗</span></button>
+            </div>
+            <div class="code-row">
+              <label for="saveCodeInput">Enter a save code</label>
+              <div class="code-input-row"><input id="saveCodeInput" inputmode="numeric" maxlength="6" placeholder="000000" autocomplete="one-time-code"><button class="soft-button" id="loadCode" type="button">Open code</button></div>
+            </div>
+            <div class="share-result" id="shareResult" hidden>
+              <span>Your save code</span>
+              <strong id="generatedCode">000000</strong>
+              <button class="soft-button" id="copyCode" type="button">Copy code</button>
+              <button class="soft-button" id="copyShareLink" type="button">Copy page link</button>
+              <p id="shareLinkNote">Keep this page's vault link with your code for another device.</p>
+            </div>
+            <div class="collab-row">
+              <div class="collab-head"><span>Collaborate online</span><span class="collab-pill" id="collabStatus"><span class="status-dot"></span><span>No active room yet</span></span></div>
+              <div class="code-input-row"><input id="collabRoomInput" inputmode="numeric" maxlength="6" placeholder="123456" autocomplete="one-time-code"><button class="soft-button" id="createCollabButton" type="button">Create room</button></div>
+              <div class="collab-actions">
+                <button class="soft-button" id="joinCollabButton" type="button">Join room</button>
+                <button class="text-button" id="leaveCollabButton" type="button">Leave room</button>
+                <button class="text-button" id="syncCollabButton" type="button">Sync now</button>
+              </div>
+            </div>
+          </article>
+          <article class="settings-panel privacy-panel">
+            <div class="panel-icon">✳</div>
+            <h2>A gentle note</h2>
+            <p>Local saves stay in your browser. Shared codes are stored in a public vault and may be visible to anyone who knows the vault link and code.</p>
+            <button class="text-button danger-button" id="resetAll" type="button">Clear all local pages</button>
+          </article>
+        </section>
+      </main>
+
+      <footer class="app-footer"><span>STILLROOM</span><span>Made for slower moments <i>✳</i></span><span id="footerTip">A quiet little place to make something.</span></footer>
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </div>
+  </body>
+</html>
